@@ -1,0 +1,76 @@
+//@version=6
+indicator("Oscar Data Bundle", overlay=false)
+
+// ============================================================
+//  Silent data bundle — all values exposed via Data Window only.
+//  Read with: mcp__tradingview__data_get_study_values
+//  Zero chart clutter (display=display.data_window on every plot).
+// ============================================================
+
+// --- Momentum ---
+rsi14    = ta.rsi(close, 14)
+[macdL, macdS, macdH] = ta.macd(close, 12, 26, 9)
+stochK   = ta.stoch(close, high, low, 14)
+stochD   = ta.sma(stochK, 3)
+
+// --- Trend / Moving Averages ---
+ema20    = ta.ema(close, 20)
+ema50    = ta.ema(close, 50)
+ema100   = ta.ema(close, 100)
+ema200   = ta.ema(close, 200)
+sma200   = ta.sma(close, 200)
+
+// --- Volatility ---
+atr14    = ta.atr(14)
+[bbMid, bbUp, bbLo] = ta.bb(close, 20, 2.0)
+bbWidth  = (bbUp - bbLo) / bbMid * 100
+
+// --- Volume ---
+volAvg20 = ta.sma(volume, 20)
+volRatio = volume / volAvg20
+
+// --- Structure ---
+hh20 = ta.highest(high, 20)
+ll20 = ta.lowest(low, 20)
+hh50 = ta.highest(high, 50)
+ll50 = ta.lowest(low, 50)
+
+// --- Distance from key EMAs (% — tells me how stretched price is) ---
+distEma20  = (close - ema20)  / ema20  * 100
+distEma50  = (close - ema50)  / ema50  * 100
+distEma200 = (close - ema200) / ema200 * 100
+
+// ============================================================
+//  Plots — all hidden from chart, visible in Data Window only
+// ============================================================
+plot(rsi14,      "RSI 14",       display = display.data_window)
+plot(macdL,      "MACD",         display = display.data_window)
+plot(macdS,      "MACD Signal",  display = display.data_window)
+plot(macdH,      "MACD Hist",    display = display.data_window)
+plot(stochK,     "Stoch K",      display = display.data_window)
+plot(stochD,     "Stoch D",      display = display.data_window)
+
+plot(ema20,      "EMA 20",       display = display.data_window)
+plot(ema50,      "EMA 50",       display = display.data_window)
+plot(ema100,     "EMA 100",      display = display.data_window)
+plot(ema200,     "EMA 200",      display = display.data_window)
+plot(sma200,     "SMA 200",      display = display.data_window)
+
+plot(atr14,      "ATR 14",       display = display.data_window)
+plot(bbUp,       "BB Upper",     display = display.data_window)
+plot(bbMid,      "BB Mid",       display = display.data_window)
+plot(bbLo,       "BB Lower",     display = display.data_window)
+plot(bbWidth,    "BB Width %",   display = display.data_window)
+
+plot(volume,     "Volume",       display = display.data_window)
+plot(volAvg20,   "Vol Avg 20",   display = display.data_window)
+plot(volRatio,   "Vol Ratio",    display = display.data_window)
+
+plot(hh20,       "20-bar High",  display = display.data_window)
+plot(ll20,       "20-bar Low",   display = display.data_window)
+plot(hh50,       "50-bar High",  display = display.data_window)
+plot(ll50,       "50-bar Low",   display = display.data_window)
+
+plot(distEma20,  "Dist EMA20 %", display = display.data_window)
+plot(distEma50,  "Dist EMA50 %", display = display.data_window)
+plot(distEma200, "Dist EMA200%", display = display.data_window)
